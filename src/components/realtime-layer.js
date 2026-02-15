@@ -2,7 +2,8 @@
 // Fetches live train positions from DULT Transport Data Hub
 
 const DULT_BASE_URL = 'https://tdh.dult-karnataka.com';
-const PROXY_URL = '/api/gtfs-rt'; // Backend proxy endpoint for CORS
+const PROXY_URL = '/api/gtfs-rt'; // Backend proxy endpoint for CORS (BMRCL)
+const PROXY_URL_BMTC = '/api/gtfs-rt/bmtc'; // BMTC bus positions
 
 export class RealtimeLayer {
   constructor(map) {
@@ -14,6 +15,13 @@ export class RealtimeLayer {
   }
 
   async start() {
+    if (this.map.getSource('realtime-vehicles')) {
+      // Already initialized, just restart polling
+      await this.fetchAndUpdate();
+      this.pollInterval = setInterval(() => this.fetchAndUpdate(), this.pollFrequencyMs);
+      return;
+    }
+
     // Add source for realtime positions
     this.map.addSource('realtime-vehicles', {
       type: 'geojson',
