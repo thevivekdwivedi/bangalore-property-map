@@ -101,6 +101,27 @@ export class HeatmapLayer {
         visibility: 'none'
       }
     });
+
+    // Price text labels at street level
+    this.map.addLayer({
+      id: 'property-labels-layer',
+      type: 'symbol',
+      source: 'property-heatmap',
+      minzoom: 14,
+      layout: {
+        'text-field': ['concat', '\u20B9', ['to-string', ['get', 'pricePerSqFt']], '/sqft'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 14, 9, 17, 12],
+        'text-offset': [0, -1.5],
+        'text-anchor': 'bottom',
+        'text-allow-overlap': false,
+        'visibility': 'none'
+      },
+      paint: {
+        'text-color': '#333',
+        'text-halo-color': 'rgba(255,255,255,0.9)',
+        'text-halo-width': 1
+      }
+    });
   }
 
   toggle() {
@@ -108,18 +129,23 @@ export class HeatmapLayer {
     const vis = this.visible ? 'visible' : 'none';
     this.map.setLayoutProperty('property-heatmap-layer', 'visibility', vis);
     this.map.setLayoutProperty('property-points-layer', 'visibility', vis);
+    this.map.setLayoutProperty('property-labels-layer', 'visibility', vis);
     return this.visible;
   }
 
   show() {
     this.visible = true;
-    this.map.setLayoutProperty('property-heatmap-layer', 'visibility', 'visible');
-    this.map.setLayoutProperty('property-points-layer', 'visibility', 'visible');
+    const vis = 'visible';
+    this.map.setLayoutProperty('property-heatmap-layer', 'visibility', vis);
+    this.map.setLayoutProperty('property-points-layer', 'visibility', vis);
+    this.map.setLayoutProperty('property-labels-layer', 'visibility', vis);
   }
 
   hide() {
     this.visible = false;
-    this.map.setLayoutProperty('property-heatmap-layer', 'visibility', 'none');
-    this.map.setLayoutProperty('property-points-layer', 'visibility', 'none');
+    const vis = 'none';
+    this.map.setLayoutProperty('property-heatmap-layer', 'visibility', vis);
+    this.map.setLayoutProperty('property-points-layer', 'visibility', vis);
+    this.map.setLayoutProperty('property-labels-layer', 'visibility', vis);
   }
 }
