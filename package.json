@@ -1,0 +1,11 @@
+{
+  "name": "namma-metro-digital-twin",
+  "version": "1.0.0",
+  "description": "Interactive digital twin of Bangalore's Namma Metro network with real estate analysis",
+  "type": "module",
+  "scripts": {
+    "start": "node server/proxy.js",
+    "dev": "node server/proxy.js"
+  },
+  "license": "MIT"
+}
