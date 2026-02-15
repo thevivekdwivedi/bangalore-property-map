@@ -19,6 +19,9 @@ export class StationModal {
       </div>
     `;
     document.getElementById('panel-close').addEventListener('click', () => this.close());
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isOpen) this.close();
+    });
   }
 
   open(stationProps) {
@@ -120,5 +123,6 @@ export class StationModal {
     const panel = document.getElementById('station-panel');
     panel.classList.remove('open');
     this.isOpen = false;
+    if (this.onClose) this.onClose();
   }
 }

@@ -147,6 +147,9 @@ class NammaMetroApp {
     this.stationModal.onFeederRoutesRequested = (stationName, routes) => {
       this.feederLayer.showRoutes(stationName, routes);
     };
+    this.stationModal.onClose = () => {
+      this.feederLayer.clear();
+    };
 
     // Heatmap layer
     this.heatmapLayer = new HeatmapLayer(this.map);
