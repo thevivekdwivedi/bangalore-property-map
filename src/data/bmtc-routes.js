@@ -86,6 +86,42 @@ export const BMTC_ROUTES = {
       id: 'MG-2', name: 'Route MG-2 (MG Road - Richmond Road)',
       coordinates: [[77.608318,12.976075],[77.607,12.970],[77.606,12.965],[77.607004,12.965301]]
     }
+  ],
+  'Whitefield (Kadugodi)': [
+    {
+      id: 'WF-1', name: 'Route WF-1 (Whitefield - ITPL)',
+      coordinates: [[77.757732,12.993819],[77.750,12.990],[77.740,12.988],[77.730,12.985]]
+    },
+    {
+      id: 'WF-2', name: 'Route WF-2 (Whitefield - Varthur)',
+      coordinates: [[77.757732,12.993819],[77.755,12.988],[77.752,12.982],[77.748,12.976]]
+    }
+  ],
+  'Marathahalli': [
+    {
+      id: 'MH-1', name: 'Route MH-1 (Marathahalli - Bellandur)',
+      coordinates: [[77.7004624,12.9542496],[77.695,12.948],[77.688,12.940],[77.6808715,12.928067]]
+    },
+    {
+      id: 'MH-2', name: 'Route MH-2 (Marathahalli - Kundalahalli)',
+      coordinates: [[77.7004624,12.9542496],[77.705,12.960],[77.710,12.968],[77.715761,12.977461]]
+    }
+  ],
+  'Rajajinagar': [
+    {
+      id: 'RJN-1', name: 'Route RJN-1 (Rajajinagar - Malleswaram)',
+      coordinates: [[77.549701,13.000334],[77.555,13.003],[77.560,13.005],[77.565,13.008]]
+    }
+  ],
+  'Banashankari': [
+    {
+      id: 'BSK-1', name: 'Route BSK-1 (Banashankari - Kanakapura Road)',
+      coordinates: [[77.573588,12.915649],[77.572,12.910],[77.570,12.903],[77.568,12.896]]
+    },
+    {
+      id: 'BSK-2', name: 'Route BSK-2 (Banashankari - Padmanabhanagar)',
+      coordinates: [[77.573588,12.915649],[77.568,12.914],[77.562,12.912],[77.556,12.910]]
+    }
   ]
 };
 
