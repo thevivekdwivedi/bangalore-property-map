@@ -27,12 +27,12 @@ export const LINE_PHASES = {
     { segment: 'RV Road to Bommasandra', status: 'operational', date: '2024-01-15', label: 'Yellow Line operational', stationRange: [0, 15] }
   ],
   pink: [
-    { segment: 'Gottigere to Nagawara (Elevated)', status: 'under_construction', date: '2026-05-01', label: 'Pink Line elevated stretch', stationRange: [0, 16] },
-    { segment: 'Underground stretch', status: 'planned', date: '2026-12-01', label: 'Pink Line underground stretch', stationRange: [0, 16] }
+    { segment: 'Gottigere to Nagawara (Elevated)', status: 'under_construction', date: '2026-05-01', label: 'Pink Line elevated opens', stationRange: [0, 16] },
+    { segment: 'Full line including underground', status: 'operational', date: '2026-12-01', label: 'Pink Line fully operational', stationRange: [0, 16] }
   ],
   blue: [
-    { segment: 'Central Silk Board to KR Puram', status: 'under_construction', date: '2026-12-01', label: 'Blue Line Phase 1', stationRange: [0, 12] },
-    { segment: 'KR Puram to KIAL', status: 'planned', date: '2027-12-01', label: 'Blue Line Phase 2 (Airport)', stationRange: [12, 27] }
+    { segment: 'Central Silk Board to KR Puram', status: 'under_construction', date: '2026-12-01', label: 'Blue Line Phase 1 opens', stationRange: [0, 12] },
+    { segment: 'Full line to KIAL', status: 'operational', date: '2027-12-01', label: 'Blue Line fully operational', stationRange: [0, 27] }
   ]
 };
 
