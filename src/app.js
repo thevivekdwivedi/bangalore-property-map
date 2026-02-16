@@ -24,6 +24,9 @@ class NammaMetroApp {
       style: MAP_STYLE,
       center: MAP_CENTER,
       zoom: MAP_ZOOM,
+      pitch: 60,
+      bearing: -20,
+      maxPitch: 85,
       minZoom: 9,
       maxZoom: 18,
       attributionControl: true

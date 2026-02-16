@@ -23,7 +23,20 @@ export const MAP_STYLE = {
         'https://c.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}@2x.png'
       ],
       tileSize: 256
+    },
+    'terrain-source': {
+      type: 'raster-dem',
+      tiles: [
+        'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
+      ],
+      encoding: 'terrarium',
+      tileSize: 256,
+      maxzoom: 15
     }
+  },
+  terrain: {
+    source: 'terrain-source',
+    exaggeration: 1.25
   },
   layers: [
     {
