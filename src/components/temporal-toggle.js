@@ -96,7 +96,7 @@ export class TemporalToggle {
         }
       }
       if (this.map.getLayer(stationLayerId)) {
-        this.map.setPaintProperty(stationLayerId, 'circle-opacity', vis.opacity);
+        this.map.setPaintProperty(stationLayerId, 'icon-opacity', vis.opacity);
       }
       if (this.map.getLayer(labelLayerId)) {
         this.map.setPaintProperty(labelLayerId, 'text-opacity', vis.opacity);

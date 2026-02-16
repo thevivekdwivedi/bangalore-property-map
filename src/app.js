@@ -7,6 +7,8 @@ import { RealtimeLayer } from './components/realtime-layer.js';
 import { HeatmapLayer } from './components/heatmap-layer.js';
 import { FeederLayer } from './components/feeder-layer.js';
 
+const STATION_ICON_SVG = `data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2246%22%20fill%3D%22white%22%20stroke%3D%22%23E0E0E0%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20d%3D%22M30%2030%20Q50%2015%2070%2030%20Q85%2050%2070%2070%20Q50%2085%2030%2070%20Q15%2050%2030%2030%22%20fill%3D%22none%22%20stroke%3D%22%232E7D32%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M50%2020%20V80%20M20%2050%20h60%22%20fill%3D%22none%22%20stroke%3D%22%236A1B9A%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%228%22%20fill%3D%22%236A1B9A%22%2F%3E%3C%2Fsvg%3E`;
+
 class NammaMetroApp {
   constructor() {
     this.map = null;
@@ -36,8 +38,14 @@ class NammaMetroApp {
     this.map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-right');
 
     this.map.on('load', () => {
-      this.addMetroLayers();
-      this.initComponents();
+      const img = new Image(40, 40);
+      img.onload = () => {
+        this.map.addImage('station-icon', img);
+        this.addMetroLayers();
+        this.initComponents();
+      };
+      img.onerror = (e) => console.error('Failed to load station icon', e);
+      img.src = STATION_ICON_SVG;
     });
   }
 
@@ -75,22 +83,19 @@ class NammaMetroApp {
 
       this.map.addLayer({
         id: `stations-${lineId}`,
-        type: 'circle',
+        type: 'symbol',
         source: `stations-${lineId}`,
+        layout: {
+          'icon-image': 'station-icon',
+          'icon-size': [
+            'interpolate', ['linear'], ['zoom'],
+            9, 0.1, 12, 0.2, 14, 0.35, 18, 0.6
+          ],
+          'icon-allow-overlap': true,
+          'icon-ignore-placement': true
+        },
         paint: {
-          'circle-radius': [
-            'interpolate', ['linear'], ['zoom'],
-            9, 2, 12, 4, 14, 7, 18, 12
-          ],
-          'circle-color': [
-            'case', ['get', 'isJunction'], '#111111', meta.color
-          ],
-          'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': [
-            'interpolate', ['linear'], ['zoom'],
-            9, 0.5, 14, 2
-          ],
-          'circle-opacity': meta.operationalSince ? 1 : 0.5
+          'icon-opacity': meta.operationalSince ? 1 : 0.5
         }
       });
 
