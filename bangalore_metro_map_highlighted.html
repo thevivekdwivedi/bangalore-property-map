@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Namma Metro Digital Twin - Bangalore</title>
+  <title>Namma Metro Digital Twin - 3D Bangalore Topology</title>
 
   <!-- MapLibre GL JS -->
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
@@ -26,13 +26,18 @@
     .app-header .subtitle { font-size: 11px; color: #666; }
 
     /* Control buttons */
-    .control-bar { display: flex; gap: 8px; margin-left: auto; }
+    .control-bar { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; }
     .control-btn {
       padding: 6px 12px; border: 1px solid #ccc; border-radius: 6px;
       background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s;
     }
     .control-btn:hover { background: #f0f0f0; }
     .control-btn.active { background: #1a73e8; color: #fff; border-color: #1a73e8; }
+    .control-btn.terrain-active { background: #2e7d32; color: #fff; border-color: #2e7d32; }
+    .control-btn.cinematic { background: #6200ea; color: #fff; border-color: #6200ea; }
+    .control-btn.cinematic:hover { background: #7c4dff; border-color: #7c4dff; }
+    .control-btn.reset { background: #455a64; color: #fff; border-color: #455a64; }
+    .control-btn.reset:hover { background: #607d8b; border-color: #607d8b; }
 
     /* Realtime status indicator */
     .realtime-indicator {
@@ -46,6 +51,33 @@
     .realtime-indicator.simulated .status-dot { background: #FF9800; }
     @keyframes pulse {
       0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+    }
+
+    /* 3D Terrain controls panel */
+    #terrain-controls {
+      position: absolute; bottom: 24px; right: 16px; z-index: 10;
+    }
+    .terrain-panel {
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+      border-radius: 10px; padding: 14px 18px; min-width: 200px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12); border: 1px solid #e0e0e0;
+    }
+    .terrain-panel h3 { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #333; }
+    .terrain-panel input[type=range] {
+      width: 100%; margin: 4px 0; accent-color: #2e7d32;
+    }
+    .terrain-panel .slider-label {
+      display: flex; justify-content: space-between; font-size: 11px; color: #666; margin-top: 2px;
+    }
+    .terrain-panel .slider-row {
+      margin-bottom: 8px;
+    }
+    .terrain-panel .slider-row label {
+      font-size: 12px; color: #444; font-weight: 500;
+    }
+    .terrain-info {
+      font-size: 10px; color: #999; margin-top: 8px; line-height: 1.4;
+      border-top: 1px solid #eee; padding-top: 8px;
     }
 
     /* Temporal controls panel */
@@ -148,7 +180,7 @@
   <div class="app-header">
     <div>
       <h1>Namma Metro Digital Twin</h1>
-      <div class="subtitle">Bangalore Metro Network & Real Estate Analysis</div>
+      <div class="subtitle">3D Bangalore Topology &middot; Metro Network &middot; Real Estate</div>
     </div>
     <div id="realtime-status" class="realtime-indicator simulated">
       <span class="status-dot"></span> Connecting...
@@ -156,6 +188,28 @@
     <div class="control-bar">
       <button class="control-btn active" id="realtime-toggle">Live Trains</button>
       <button class="control-btn" id="heatmap-toggle">Property Heatmap</button>
+      <button class="control-btn terrain-active" id="terrain-toggle">3D Terrain</button>
+      <button class="control-btn cinematic" id="cinematic-view">Flyover</button>
+      <button class="control-btn reset" id="reset-view">Reset View</button>
+    </div>
+  </div>
+
+  <!-- 3D Terrain controls -->
+  <div id="terrain-controls">
+    <div class="terrain-panel">
+      <h3>3D Terrain</h3>
+      <div class="slider-row">
+        <label>Elevation Exaggeration</label>
+        <input type="range" id="terrain-exaggeration" min="0" max="5" step="0.5" value="2.5">
+        <div class="slider-label">
+          <span>Flat</span>
+          <span id="exaggeration-value">2.5x</span>
+          <span>5x</span>
+        </div>
+      </div>
+      <div class="terrain-info">
+        Bangalore sits on the Deccan Plateau at ~920m elevation. Drag to rotate, right-click to tilt. Elevation data from AWS Terrain Tiles.
+      </div>
     </div>
   </div>
 
