@@ -5,7 +5,16 @@
   "type": "module",
   "scripts": {
     "start": "node server/proxy.js",
-    "dev": "node server/proxy.js"
+    "dev": "node server/proxy.js",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:screenshots": "playwright test --project=chromium",
+    "test:report": "playwright show-report"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
 }
