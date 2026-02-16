@@ -36,7 +36,7 @@ export const MAP_STYLE = {
   },
   terrain: {
     source: 'terrain-source',
-        exaggeration: 250
+        exaggeration: 250000000
   },
   layers: [
     {
