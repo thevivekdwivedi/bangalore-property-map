@@ -1,6 +1,6 @@
-// Main application - Namma Metro Digital Twin
+// Main application - Namma Metro Digital Twin (3D Topology)
 import { LINE_METADATA, LINE_PATHS, buildLineGeoJSON, buildStationsGeoJSON } from './data/metro-network.js';
-import { MAP_STYLE, MAP_CENTER, MAP_ZOOM } from './styles/map-theme.js';
+import { MAP_STYLE, MAP_CENTER, MAP_ZOOM, MAP_PITCH, MAP_BEARING, TERRAIN_CONFIG } from './styles/map-theme.js';
 import { TemporalToggle } from './components/temporal-toggle.js';
 import { StationModal } from './components/station-modal.js';
 import { RealtimeLayer } from './components/realtime-layer.js';
@@ -15,26 +15,36 @@ class NammaMetroApp {
     this.realtimeLayer = null;
     this.heatmapLayer = null;
     this.feederLayer = null;
+    this.terrainEnabled = true;
+    this.terrainExaggeration = TERRAIN_CONFIG.defaultExaggeration;
   }
 
   async init() {
-    // Initialize MapLibre GL map
+    // Initialize MapLibre GL map with 3D terrain
     this.map = new maplibregl.Map({
       container: 'map',
       style: MAP_STYLE,
       center: MAP_CENTER,
       zoom: MAP_ZOOM,
+      pitch: MAP_PITCH,
+      bearing: MAP_BEARING,
       minZoom: 9,
       maxZoom: 18,
-      attributionControl: true
+      maxPitch: 75,
+      attributionControl: true,
+      antialias: true
     });
 
-    this.map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    this.map.addControl(new maplibregl.NavigationControl({
+      visualizePitch: true,
+      showCompass: true
+    }), 'top-right');
     this.map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-right');
 
     this.map.on('load', () => {
       this.addMetroLayers();
       this.initComponents();
+      this.init3DControls();
     });
   }
 
@@ -130,6 +140,104 @@ class NammaMetroApp {
         this.map.getCanvas().style.cursor = '';
       });
     }
+  }
+
+  init3DControls() {
+    // Terrain toggle
+    const terrainBtn = document.getElementById('terrain-toggle');
+    if (terrainBtn) {
+      terrainBtn.classList.add('active');
+      terrainBtn.addEventListener('click', () => {
+        this.terrainEnabled = !this.terrainEnabled;
+        if (this.terrainEnabled) {
+          this.map.setTerrain({
+            source: TERRAIN_CONFIG.source,
+            exaggeration: this.terrainExaggeration
+          });
+          terrainBtn.classList.add('active');
+        } else {
+          this.map.setTerrain(null);
+          terrainBtn.classList.remove('active');
+        }
+      });
+    }
+
+    // Terrain exaggeration slider
+    const exaggerationSlider = document.getElementById('terrain-exaggeration');
+    const exaggerationLabel = document.getElementById('exaggeration-value');
+    if (exaggerationSlider) {
+      exaggerationSlider.value = this.terrainExaggeration;
+      if (exaggerationLabel) exaggerationLabel.textContent = `${this.terrainExaggeration}x`;
+
+      exaggerationSlider.addEventListener('input', (e) => {
+        this.terrainExaggeration = parseFloat(e.target.value);
+        if (exaggerationLabel) exaggerationLabel.textContent = `${this.terrainExaggeration}x`;
+        if (this.terrainEnabled) {
+          this.map.setTerrain({
+            source: TERRAIN_CONFIG.source,
+            exaggeration: this.terrainExaggeration
+          });
+        }
+      });
+    }
+
+    // Reset view button
+    const resetBtn = document.getElementById('reset-view');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        this.map.flyTo({
+          center: MAP_CENTER,
+          zoom: MAP_ZOOM,
+          pitch: MAP_PITCH,
+          bearing: MAP_BEARING,
+          duration: 1500
+        });
+      });
+    }
+
+    // Fly-to cinematic view button
+    const cinematicBtn = document.getElementById('cinematic-view');
+    if (cinematicBtn) {
+      cinematicBtn.addEventListener('click', () => {
+        this.playCinematicFlyover();
+      });
+    }
+  }
+
+  playCinematicFlyover() {
+    // Fly over Bangalore from south to north along metro corridor
+    const waypoints = [
+      { center: [77.60, 12.85], zoom: 13, pitch: 70, bearing: 0, duration: 0 },
+      { center: [77.57, 12.92], zoom: 13.5, pitch: 65, bearing: 30, duration: 4000 },
+      { center: [77.57, 12.975], zoom: 14, pitch: 60, bearing: -20, duration: 4000 },
+      { center: [77.55, 13.02], zoom: 13, pitch: 55, bearing: 10, duration: 4000 },
+      { center: MAP_CENTER, zoom: MAP_ZOOM, pitch: MAP_PITCH, bearing: MAP_BEARING, duration: 3000 }
+    ];
+
+    let i = 0;
+    const flyNext = () => {
+      if (i >= waypoints.length) return;
+      const wp = waypoints[i];
+      if (i === 0) {
+        this.map.jumpTo({ center: wp.center, zoom: wp.zoom, pitch: wp.pitch, bearing: wp.bearing });
+        i++;
+        setTimeout(flyNext, 500);
+      } else {
+        this.map.flyTo({
+          center: wp.center,
+          zoom: wp.zoom,
+          pitch: wp.pitch,
+          bearing: wp.bearing,
+          duration: wp.duration,
+          essential: true
+        });
+        this.map.once('moveend', () => {
+          i++;
+          flyNext();
+        });
+      }
+    };
+    flyNext();
   }
 
   initComponents() {
