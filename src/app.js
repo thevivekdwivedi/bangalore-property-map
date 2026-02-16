@@ -7,7 +7,7 @@ import { RealtimeLayer } from './components/realtime-layer.js';
 import { HeatmapLayer } from './components/heatmap-layer.js';
 import { FeederLayer } from './components/feeder-layer.js';
 
-const STATION_ICON_SVG = `data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2246%22%20fill%3D%22white%22%20stroke%3D%22%23E0E0E0%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20d%3D%22M30%2030%20Q50%2015%2070%2030%20Q85%2050%2070%2070%20Q50%2085%2030%2070%20Q15%2050%2030%2030%22%20fill%3D%22none%22%20stroke%3D%22%232E7D32%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M50%2020%20V80%20M20%2050%20h60%22%20fill%3D%22none%22%20stroke%3D%22%236A1B9A%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%228%22%20fill%3D%22%236A1B9A%22%2F%3E%3C%2Fsvg%3E`;
+const STATION_ICON_SVG = `data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2240%22%20height%3D%2280%22%20viewBox%3D%220%200%20100%20200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20x%3D%2244%22%20y%3D%2290%22%20width%3D%2212%22%20height%3D%22100%22%20fill%3D%22%23555555%22%20stroke%3D%22none%22%2F%3E%3Cellipse%20cx%3D%2250%22%20cy%3D%22190%22%20rx%3D%2220%22%20ry%3D%228%22%20fill%3D%22%23333333%22%20opacity%3D%220.5%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2246%22%20fill%3D%22white%22%20stroke%3D%22%23E0E0E0%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20d%3D%22M30%2030%20Q50%2015%2070%2030%20Q85%2050%2070%2070%20Q50%2085%2030%2070%20Q15%2050%2030%2030%22%20fill%3D%22none%22%20stroke%3D%22%232E7D32%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M50%2020%20V80%20M20%2050%20h60%22%20fill%3D%22none%22%20stroke%3D%22%236A1B9A%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%228%22%20fill%3D%22%236A1B9A%22%2F%3E%3C%2Fsvg%3E`;
 
 class NammaMetroApp {
   constructor() {
@@ -38,7 +38,7 @@ class NammaMetroApp {
     this.map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-right');
 
     this.map.on('load', () => {
-      const img = new Image(40, 40);
+      const img = new Image(40, 80);
       img.onload = () => {
         this.map.addImage('station-icon', img);
         this.addMetroLayers();
@@ -91,6 +91,7 @@ class NammaMetroApp {
             'interpolate', ['linear'], ['zoom'],
             9, 0.1, 12, 0.2, 14, 0.35, 18, 0.6
           ],
+          'icon-anchor': 'bottom',
           'icon-allow-overlap': true,
           'icon-ignore-placement': true
         },
