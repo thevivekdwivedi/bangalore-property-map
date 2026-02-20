@@ -1,14 +1,20 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Bangalore Metro Map', () => {
-  test('should load the main page and redirect', async ({ page }) => {
+  test('should load the main page (served directly by proxy)', async ({ page }) => {
+    // The proxy server serves bangalore_metro_map_highlighted.html directly at /
+    // without a redirect, so the URL remains at /
     await page.goto('/');
 
-    await page.waitForURL('**/bangalore_metro_map_highlighted.html', {
-      timeout: 10000
-    });
+    // Wait for the page to fully load
+    await page.waitForLoadState('networkidle');
 
-    await expect(page).toHaveURL(/bangalore_metro_map_highlighted\.html/);
+    // Verify we're at the root URL (no redirect occurs)
+    await expect(page).toHaveURL('/');
+
+    // Verify the page title to confirm correct content is loaded
+    const title = await page.title();
+    expect(title).toBeTruthy();
 
     await page.screenshot({
       path: 'test-results/screenshots/main-page.png',

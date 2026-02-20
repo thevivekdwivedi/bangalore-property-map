@@ -63,8 +63,30 @@ npm run test:report
 ## Screenshot Locations
 
 All screenshots are saved to:
-- Manual screenshots: `test-results/screenshots/`
-- Baseline screenshots: `tests/*.spec.js-snapshots/`
+- **Manual screenshots**: `test-results/screenshots/`
+  - Generated on every test run
+  - Not committed to git (in .gitignore)
+  - Useful for visual inspection
+
+- **Baseline snapshots**: `tests/*.spec.js-snapshots/`
+  - Used for visual regression testing
+  - **MUST be committed to git**
+  - Auto-generated on first run or when updated
+
+### Generating Baseline Snapshots (First Time)
+
+If you're setting up the project for the first time or baseline snapshots are missing:
+
+```bash
+# Generate all baseline snapshots
+npx playwright test --update-snapshots
+
+# Commit the generated snapshots
+git add tests/*.spec.js-snapshots/
+git commit -m "Add baseline snapshots for visual regression tests"
+```
+
+**Important**: Baseline snapshots are required for CI/CD to pass. If they're missing from the repository, visual regression tests will fail in CI.
 
 ## Validating Changes
 
